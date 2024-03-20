@@ -1,6 +1,7 @@
 # MCQs Creator App with Langchain
 
 This is a Streamlit web application for creating multiple-choice questions (MCQs) using Langchain.
+<img width="726" alt="image" src="https://github.com/ameyapb/genAI_series-MCQ-Generator/assets/67974891/dbfc89fd-4fa1-42e5-84ca-c3cc2b3e41e4">
 
 ## Description
 
