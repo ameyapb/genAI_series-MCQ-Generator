@@ -3,7 +3,7 @@ import json
 import pandas as pd
 from dotenv import load_dotenv
 from src.mcqgenerator.logger import logging
-from src.mcqgenerator.utils import read_file,get_table_data
+from src.mcqgenerator.utils import read_file,get_table_data,wiki_retriever
 from src.mcqgenerator.MCQgenerator import generate_evaluate_chain
 from langchain.callbacks import get_openai_callback
 import streamlit as st
@@ -15,7 +15,7 @@ with open('/llm/response.json', 'r') as file:
 st.title("MCQs Creator App with Langchain!")
 
 with st.form("user_inputs"):
-    uploaded_file=st.file_uploader("Upload your PDF or txt file")
+    uploaded_file=st.file_uploader("Upload your PDF or txt file. Incase if you dont have data, leave this field empty")
 
     mcq_count=st.number_input("No. of MCQ's", min_value=3, max_value=50)
 
@@ -25,10 +25,13 @@ with st.form("user_inputs"):
 
     button=st.form_submit_button("Create MCQ's")
 
-    if button and uploaded_file is not None and mcq_count and subject and tone:
+    if button:
         with st.spinner("loading..."):
             try:
-                text=read_file(uploaded_file)
+                if uploaded_file is not None:
+                    text = read_file(uploaded_file)
+                else:
+                    text = wiki_retriever(subject)
                 with get_openai_callback() as cb:
                     response = generate_evaluate_chain(
                         {
